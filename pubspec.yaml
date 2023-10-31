@@ -1,0 +1,13 @@
+name: sqllite_table_builder
+description: A starting point for Dart libraries or applications.
+version: 0.0.1
+repository: https://github.com/ZAZPRO/sqllite_table_builder
+
+environment:
+  sdk: ^3.1.4
+
+dependencies:
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0

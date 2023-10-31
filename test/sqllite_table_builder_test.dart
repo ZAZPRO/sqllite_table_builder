@@ -2,15 +2,14 @@ import 'package:sqllite_table_builder/sqllite_table_builder.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
-    final awesome = Awesome();
+  group('Basic table creation', () {
+    var tableName = "test_table";
 
-    setUp(() {
-      // Additional setup goes here.
-    });
+    test('Empty Table', () {
+      var table = SqlTable(tableName);
+      var query = table.buildSqlCreateQuery();
 
-    test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
+      expect(query, 'CREATE TABLE $tableName (\n\t_id INTEGER PRIMARY KEY\n);');
     });
   });
 }

@@ -127,9 +127,8 @@ class SqlColumn implements SqlString {
 
   @override
   String sqlString() {
-    String nullableString =
-        (!nullable && foreignKey == null) ? ' NOT NULL' : '';
-    String uniqueString = (!unique && foreignKey == null) ? ' UNIQUE' : '';
+    String nullableString = !nullable ? ' NOT NULL' : '';
+    String uniqueString = unique ? ' UNIQUE' : '';
 
     return '$name ${type.sqlString()}$nullableString$uniqueString';
   }

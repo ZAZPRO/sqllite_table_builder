@@ -1,24 +1,48 @@
 import 'package:sqllite_table_builder/sqllite_table_builder.dart';
 
 void main() {
-  var userProfileUuidColumnName = "uuid";
-  var userProfileTable = SqlTable("user_profile");
-  userProfileTable
-    ..addColumn(userProfileUuidColumnName, SqlType.text)
-    ..nullable(false);
+  final userProfileTableName = "user_profile";
+  final userProfileUuidColumnName = "uuid";
 
-  var userProfileQuery = userProfileTable.buildSqlCreateQuery();
+  // Create a table builder with table name and specified primary key.
+  final userProfileTableBuilder = SqlTableBuilder(
+    userProfileTableName,
+    primaryKey: SqlColumn(name: userProfileUuidColumnName, type: SqlType.text),
+  );
+
+  // Generate SQL query to create this table.
+  final userProfileQuery = userProfileTableBuilder.buildSqlCreateQuery();
+
+  /* Will print:
+    CREATE TABLE user_profile (
+          uuid TEXT PRIMARY KEY
+    );
+  */
   print(userProfileQuery);
 
-  var someDataTable = SqlTable("some_data");
+  // Create a table builder with table name and default primary key.
+  final someDataTable = SqlTableBuilder("some_data");
+  // Create columns and foreign key linked to user profile.
   someDataTable
-    ..addColumn("data", SqlType.integer)
+    ..createColumn("data", SqlType.integer)
     ..nullable(false)
-    ..addColumn("more_data", SqlType.real)
-    ..addColumn(userProfileUuidColumnName, SqlType.text)
-    ..foreignKey(userProfileTable, userProfileUuidColumnName)
+    ..createColumn("more_data", SqlType.real)
+    ..createColumn(userProfileUuidColumnName, SqlType.text)
+    ..foreignKey(userProfileTableBuilder, userProfileUuidColumnName)
     ..onDelete(SqlForeignKeyConstrain.setNull);
 
-  var someDataQuery = someDataTable.buildSqlCreateQuery();
+  // Generate SQL query to create this table.
+  final someDataQuery = someDataTable.buildSqlCreateQuery();
+
+  /* Will print:
+    CREATE TABLE some_data (
+        _id INTEGER PRIMARY KEY,
+        data INTEGER NOT NULL,
+        more_data REAL,
+        uuid TEXT,
+        FOREIGN KEY (uuid) REFERENCES user_profile (uuid)
+        ON DELETE SET NULL
+    );
+  */
   print(someDataQuery);
 }

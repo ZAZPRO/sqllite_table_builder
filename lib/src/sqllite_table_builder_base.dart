@@ -62,7 +62,7 @@ enum SqlForeignKeyConstrain implements SqlString {
 }
 
 /// SQL Foreign Key linkage
-class SqlForeignKey {
+class SqlForeignKey implements SqlString {
   SqlColumn column;
   SqlTable referencedTable;
   String referencedColumn;
@@ -83,6 +83,7 @@ class SqlForeignKey {
     onDelete = onDelete;
   }
 
+  @override
   String sqlString() {
     if (!referencedTable.created) {
       throw TableNotBuildException(
@@ -110,7 +111,7 @@ class SqlForeignKey {
 }
 
 /// SQL data column.
-class SqlColumn {
+class SqlColumn implements SqlString {
   SqlType type;
   String name;
   bool nullable;
@@ -124,6 +125,7 @@ class SqlColumn {
       this.unique = false,
       this.foreignKey});
 
+  @override
   String sqlString() {
     String nullableString =
         (!nullable && foreignKey == null) ? ' NOT NULL' : '';
@@ -177,7 +179,7 @@ class SqlTable {
   }
 }
 
-/// SQL Table.
+/// SQL Table Builder.
 class SqlTableBuilder {
   late SqlTable table;
 

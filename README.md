@@ -11,29 +11,51 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+Programmatically create SQL Lite tables.
+
+Currently SQFLite is tested.
+> Warning: This package is in alpha. Use it at own risk.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Programmatically create SQL Lite tables.
+- User Foreign Keys to link tables.
+- Use nice programming interface to ensure better safety.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+```bash
+dart pub add sqllite_table_builder
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+```dart
+// Create a table builder with table name and default primary key.
+final someDataTable = SqlTableBuilder("some_data");
+// Generate SQL query to create this table.
+final someDataQuery = someDataTable.buildSqlCreateQuery();
+```
 
 ```dart
-const like = 'sample';
+// Create a table builder with table name and specified primary key.
+final userProfileTableBuilder = SqlTableBuilder(
+    "user_data",
+    primaryKey: SqlColumn(name: "uuid", type: SqlType.text),
+);
+
+// Add required columns to a table.
+userProfileTableBuilder
+    ..createColumn("name", SqlType.text)
+    ..nullable(false)
+    ..createColumn("age", SqlType.integer)
+
+// Generate SQL query to create this table.
+final userProfileQuery = userProfileTableBuilder.buildSqlCreateQuery();
 ```
+
+More examples in ```/examples``` directory and ```/tests```.
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+If you would like to contribute to the plugin, check out it's [Github page](https://github.com/ZAZPRO/sqllite_table_builder).

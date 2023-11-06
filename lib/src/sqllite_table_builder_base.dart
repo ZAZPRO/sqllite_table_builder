@@ -146,35 +146,29 @@ class SqlTable {
   bool get created => _created;
 
   String buildSqlCreateQuery() {
-    StringBuffer stringBuffer = StringBuffer(
-        'CREATE TABLE $name (\n\t${primaryKey.name} ${primaryKey.type.sqlString()} PRIMARY KEY');
+    StringBuffer stringBuffer = StringBuffer();
+    List<SqlForeignKey> foreignKeys = [];
 
     // Whitespaces are for nice formatting only.
-    for (var i = 0; i < columns.length; i++) {
-      var column = columns[i];
-      bool isLast = (i == columns.length);
-
-      if (!isLast) {
-        stringBuffer.write(',');
-      }
-
-      stringBuffer.write('\n\t${column.sqlString()}');
+    for (final column in columns) {
+      stringBuffer.write(',\n\t${column.sqlString()}');
 
       if (column.foreignKey != null) {
-        if (!isLast) {
-          stringBuffer.write(',');
-        }
-
-        stringBuffer.write('\n\t${column.foreignKey!.sqlString()}');
+        foreignKeys.add(column.foreignKey!);
       }
     }
 
-    stringBuffer.write("\n);");
+    for (final foreignKey in foreignKeys) {
+      stringBuffer.write(',\n\t${foreignKey.sqlString()}');
+    }
 
     // Mark table as created, to be sure that we do not create non valid constrain.
     _created = true;
 
-    return stringBuffer.toString();
+    final query =
+        'CREATE TABLE $name (\n\t${primaryKey.name} ${primaryKey.type.sqlString()} PRIMARY KEY$stringBuffer\n);';
+
+    return query;
   }
 }
 

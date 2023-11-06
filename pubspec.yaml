@@ -1,6 +1,6 @@
 name: sqllite_table_builder
 description: Programmatically create SQL Lite tables.
-version: 0.1.1
+version: 0.1.2
 repository: https://github.com/ZAZPRO/sqllite_table_builder
 
 environment:
